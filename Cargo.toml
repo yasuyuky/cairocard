@@ -1,0 +1,16 @@
+[package]
+edition = "2018"
+name = "cairocard"
+version = "0.1.0"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0.44"
+cairo-rs = {version = "0.14.9", features = ["pdf"]}
+pango = "0.14.8"
+pangocairo = "0.14.0"
+regex = "1.5.4"
+serde = {version = "1.0.130", features = ["derive"]}
+structopt = "0.3.23"
+toml = "0.5.8"
