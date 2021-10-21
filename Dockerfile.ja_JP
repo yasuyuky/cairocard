@@ -1,0 +1,17 @@
+FROM rust:1.55-bullseye as builder
+
+WORKDIR /usr/src/cairocard
+RUN apt-get update && apt-get install -y libpango1.0-dev libcairo2 pkg-config curl && rm -rf /var/lib/apt/lists/*
+RUN mkdir ~/.fonts && cd ~/.fonts \
+    && curl -L https://github.com/google/fonts/archive/main.tar.gz | tar zx --wildcards '*.ttf'
+COPY . .
+RUN cargo install --path .
+
+FROM debian:bullseye-slim
+RUN apt-get update && apt-get install -y libpango1.0-dev libcairo2 fonts-noto-cjk fontconfig locales && rm -rf /var/lib/apt/lists/*
+COPY --from=builder /usr/local/cargo/bin/cairocard /usr/local/bin/cairocard
+WORKDIR /work
+COPY --from=builder /root/.fonts /root/.fonts
+RUN fc-cache -f -v && locale-gen ja_JP.UTF-8
+
+ENTRYPOINT ["cairocard"]
