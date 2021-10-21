@@ -134,3 +134,31 @@ pub fn write(
     }
     Ok(())
 }
+
+#[test]
+fn test_write() -> Result<()> {
+    let surface = cairo::PdfSurface::new(257.0, 155.0, "test_write.pdf")?;
+    let cr = cairo::Context::new(&surface)?;
+    let pctx = pangocairo::create_context(&cr).expect("pango::Context");
+    pangocairo::context_set_resolution(&pctx, 300.0);
+    let layout = pango::Layout::new(&pctx);
+
+    let dic = HashMap::new();
+    let mut descdic = HashMap::new();
+    descdic.insert("default".to_owned(), "Noto Sans CJK JP Medium".to_owned());
+    cr.set_source_rgb(0.0, 0.0, 0.0);
+
+    let te = TextElement {
+        text: Text::single("test text"),
+        fontset: "default".to_owned(),
+        fontsize: 2.0,
+        align: Some(Align::Center),
+        pos: (128.5, 30.0),
+        space: Some((0.5, 0.5)),
+        column: Some(10),
+    };
+    write(&cr, &layout, &te, &dic, &descdic)?;
+    cr.save()?;
+
+    Ok(())
+}
