@@ -1,4 +1,4 @@
-FROM rust:1.55-bullseye as builder
+FROM rust:1.56-bullseye as builder
 
 WORKDIR /usr/src/cairocard
 RUN apt-get update && apt-get install -y libpango1.0-dev libcairo2 pkg-config curl && rm -rf /var/lib/apt/lists/*
